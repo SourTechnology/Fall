@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10110f">
+  <title>Fall! — Share files together</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#10110f; --panel:#191a17; --lime:#d9ff70; --mint:#8ef0c2;
+      --white:#f7f8f2; --muted:#a4a79b; --line:rgba(255,255,255,.13);
+      --red:#ff8295;
+    }
+    * { box-sizing:border-box }
+    body {
+      margin:0; min-height:100vh; color:var(--white);
+      background:radial-gradient(ellipse at 75% 5%,rgba(142,240,194,.10),transparent 30rem),var(--bg);
+      font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+    }
+    button,input { font:inherit }
+    button { cursor:pointer }
+    .page { width:min(900px,calc(100% - 36px)); margin:auto }
+    header {
+      height:72px; display:flex; align-items:center; justify-content:space-between;
+      border-bottom:1px solid var(--line);
+    }
+    .logo { font-size:1.55rem; font-weight:900; letter-spacing:-1.5px }
+    .logo span { color:var(--lime) }
+    .badge { color:var(--mint); font-size:.68rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase }
+    main { padding:48px 0 60px }
+    .hero { text-align:center; margin-bottom:28px }
+    .eyebrow { color:var(--mint); font-size:.7rem; font-weight:800; letter-spacing:.15em; text-transform:uppercase }
+    h1 { margin:12px 0; font-size:clamp(4rem,13vw,7rem); line-height:.86; letter-spacing:-.09em }
+    h1 span { color:var(--lime) }
+    .hero p { max-width:520px; margin:15px auto 0; color:var(--muted); line-height:1.65 }
+    .layout { display:grid; grid-template-columns:1fr 1fr; gap:14px }
+    .panel {
+      padding:21px; border:1px solid var(--line); border-radius:16px;
+      background:linear-gradient(145deg,#ffffff0d,#ffffff04);
+    }
+    .panel h2 { margin:0 0 8px; font-size:1.05rem }
+    .panel p { color:var(--muted); font-size:.82rem; line-height:1.55 }
+    label { display:block; margin:15px 0 7px; font-size:.78rem; font-weight:700 }
+    input[type="text"] {
+      width:100%; min-height:45px; padding:11px 12px; color:var(--white);
+      border:1px solid var(--line); border-radius:9px; outline:none; background:#11120f;
+    }
+    input:focus { border-color:var(--lime) }
+    .button {
+      min-height:42px; padding:0 15px; border:1px solid transparent; border-radius:9px;
+      color:#171811; background:var(--lime); font-weight:800;
+    }
+    .button:hover { filter:brightness(1.07); transform:translateY(-1px) }
+    .button.secondary { color:var(--white); border-color:var(--line); background:transparent }
+    .button.secondary:hover { border-color:var(--lime) }
+    .button.full { width:100%; margin-top:12px }
+    .code-row { display:flex; gap:8px; margin-top:14px }
+    .code-row input { text-align:center; font-size:1.2rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase }
+    .own-code {
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      margin-top:15px; padding:14px; border:1px dashed #d9ff7055; border-radius:10px;
+    }
+    .own-code small { display:block; color:var(--muted); font-size:.7rem }
+    .own-code strong { display:block; margin-top:4px; color:var(--lime); font-size:1.2rem; letter-spacing:.12em }
+    .status {
+      min-height:22px; margin:12px 0 0; color:var(--muted); font-size:.78rem;
+    }
+    .status.error { color:var(--red) }
+    .status.success { color:var(--mint) }
+    .room { margin-top:14px }
+    .dropzone {
+      min-height:150px; display:grid; place-items:center; padding:20px; text-align:center;
+      border:1px dashed #ffffff35; border-radius:12px; background:#ffffff04;
+      transition:border-color .2s,background .2s;
+    }
+    .dropzone.dragover { border-color:var(--lime); background:#d9ff7010 }
+    .dropzone strong { display:block; margin-bottom:5px }
+    .dropzone p { margin:0 0 12px; font-size:.76rem }
+    .file-list { display:grid; gap:8px; margin-top:12px }
+    .file-item {
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      padding:11px 12px; border:1px solid var(--line); border-radius:9px;
+    }
+    .file-name { min-width:0; overflow-wrap:anywhere; font-size:.8rem; font-weight:700 }
+    .file-size { flex:0 0 auto; color:var(--muted); font-size:.7rem }
+    .notice {
+      margin-top:15px; padding:11px; border:1px solid var(--line); border-radius:10px;
+      color:var(--muted); background:#ffffff04; font-size:.72rem; line-height:1.55;
+    }
+    .notice strong { color:var(--lime) }
+    footer {
+      padding:16px 0 22px; border-top:1px solid var(--line);
+      color:var(--muted); font-size:.7rem; line-height:1.6; text-align:center;
+    }
+    footer strong { color:var(--lime) }
+    @media(max-width:650px) {
+      .page { width:calc(100% - 28px) }
+      .layout { grid-template-columns:1fr }
+      .panel { padding:17px }
+      main { padding-top:35px }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="logo">Fall<span>!</span></div>
+      <div class="badge">Share together</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow">A little code. A shared space.</div>
+        <h1>FALL<span>!</span></h1>
+        <p>
+          Share your Fall code with a friend, enter theirs, and open a shared file room.
+          No account needed for this prototype.
+        </p>
+      </section>
+
+      <section class="layout">
+        <div class="panel">
+          <h2>Your Fall code</h2>
+          <p>Share this code with your friend. They can enter it on their device to join your room.</p>
+          <div class="own-code">
+            <div>
+              <small>Your code</small>
+              <strong id="myCode">------</strong>
+            </div>
+            <button id="copyCode" class="button secondary" type="button">Copy</button>
+          </div>
+          <button id="newCode" class="button full" type="button">Generate new code</button>
+        </div>
+
+        <div class="panel">
+          <h2>Join a friend</h2>
+          <p>Enter the Fall code your friend shared with you.</p>
+          <form id="joinForm">
+            <label for="friendCode">Friend’s Fall code</label>
+            <div class="code-row">
+              <input id="friendCode" type="text" maxlength="6" placeholder="ABC123" required aria-label="Friend's Fall code">
+              <button class="button" type="submit">Join</button>
+            </div>
+          </form>
+          <div id="joinStatus" class="status" aria-live="polite">Waiting for a code.</div>
+        </div>
+      </section>
+
+      <section id="room" class="panel room" hidden>
+        <div class="panel-head">
+          <h2>Shared room</h2>
+          <span id="roomLabel" class="badge"></span>
+        </div>
+        <p>Select files to add them to this local preview.</p>
+
+        <div id="dropzone" class="dropzone">
+          <div>
+            <strong>Drop files here</strong>
+            <p>or choose files from your device</p>
+            <button id="chooseFiles" class="button secondary" type="button">Choose files</button>
+            <input id="fileInput" type="file" multiple hidden>
+          </div>
+        </div>
+        <div id="fileList" class="file-list"></div>
+
+        <div class="notice">
+          <strong>Prototype notice:</strong> files selected here stay in this browser and are not sent to your friend.
+          Real cross-device sharing needs a secure signaling service and WebRTC or a file-transfer backend.
+        </div>
+      </section>
+    </main>
+
+    <footer><strong>Fall!</strong> — This single-file prototype does not transfer or upload files.</footer>
+  </div>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let myCode = createCode();
+
+      function createCode() {
+        let code = "";
+        for (let i = 0; i < 6; i++) {
+          code += alphabet[Math.floor(Math.random() * alphabet.length)];
+        }
+        return code;
+      }
+
+      function displayCode() {
+        $("myCode").textContent = myCode;
+      }
+
+      function joinRoom(code) {
+        const normalized = code.trim().toUpperCase();
+        if (!/^[A-Z0-9]{6}$/.test(normalized)) {
+          $("joinStatus").textContent = "Enter a 6-character Fall code.";
+          $("joinStatus").className = "status error";
+          return;
+        }
+        if (normalized === myCode) {
+          $("joinStatus").textContent = "That’s your own code. Enter your friend’s code instead.";
+          $("joinStatus").className = "status error";
+          return;
+        }
+
+        $("joinStatus").textContent = "Room opened in local preview.";
+        $("joinStatus").className = "status success";
+        $("roomLabel").textContent = `Room ${normalized}`;
+        $("room").hidden = false;
+        $("room").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function formatBytes(bytes) {
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+      }
+
+      function addFiles(files) {
+        const list = $("fileList");
+        [...files].forEach((file) => {
+          const item = document.createElement("div");
+          item.className = "file-item";
+
+          const name = document.createElement("span");
+          name.className = "file-name";
+          name.textContent = file.name;
+
+          const size = document.createElement("span");
+          size.className = "file-size";
+          size.textContent = formatBytes(file.size);
+
+          item.append(name, size);
+          list.appendChild(item);
+        });
+      }
+
+      $("newCode").addEventListener("click", () => {
+        myCode = createCode();
+        displayCode();
+      });
+
+      $("copyCode").addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(myCode);
+          $("copyCode").textContent = "Copied!";
+          setTimeout(() => $("copyCode").textContent = "Copy", 1400);
+        } catch {
+          $("copyCode").textContent = myCode;
+          setTimeout(() => $("copyCode").textContent = "Copy", 1800);
+        }
+      });
+
+      $("joinForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        joinRoom($("friendCode").value);
+      });
+
+      $("friendCode").addEventListener("input", (event) => {
+        event.target.value = event.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6).toUpperCase();
+      });
+
+      $("chooseFiles").addEventListener("click", () => $("fileInput").click());
+      $("fileInput").addEventListener("change", (event) => addFiles(event.target.files));
+
+      const dropzone = $("dropzone");
+      dropzone.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        dropzone.classList.add("dragover");
+      });
+      dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+      dropzone.addEventListener("drop", (event) => {
+        event.preventDefault();
+        dropzone.classList.remove("dragover");
+        addFiles(event.dataTransfer.files);
+      });
+
+      displayCode();
+    })();
+  </script>
+</body>
+</html>
